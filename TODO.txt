@@ -1,0 +1,19 @@
+A bounty can have:
+  - Location
+  - Activity (strike/crucible/gambit/patrol (i.e. general or any))
+  - Requirement type (patrols/adventures/kills/chests)
+  - Kill requirements can have:
+    - Ability (super/grenade/melee)
+    - Gun type
+    - Element type
+Steps:
+  - Start with either location (crucible/gambit/vex offensive would have no location)
+  - Group together by requirement type
+    - For kills, group by weapon and element type, not sure yet
+    - Need to also account for bounties that require kills with abilities
+
+Interface:
+  - Lists steps first on location, then steps to take
+  - Displays stats like total xp, infamy/valor/etc., legendary gear after completing all bounties
+  - Can select weekly/daily/all bounties/quests
+  - Can filter by location/requirements/activity
