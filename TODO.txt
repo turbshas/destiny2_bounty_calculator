@@ -1,19 +1,35 @@
 A bounty can have:
   - Location
   - Activity (strike/crucible/gambit/patrol (i.e. general or any))
-  - Requirement type (patrols/adventures/kills/chests)
+  - Task type (patrols/adventures/kills/chests/crucible matches/strikes/gambit matches/materials/public events)
   - Kill requirements can have:
+    - Precision kills
+	- Multikills
     - Ability (super/grenade/melee)
     - Gun type
     - Element type
 Steps:
-  - Start with either location (crucible/gambit/vex offensive would have no location)
-  - Group together by requirement type
-    - For kills, group by weapon and element type, not sure yet
-    - Need to also account for bounties that require kills with abilities
+  - Pull bounties a user owns OR all bounties available that day
+  - Convert whatever the api returns into something the program understands
+  - Group together similar tasks:
+    - Coalesce duplicates
+	- For kills:
+	  - Merge bounties with any location into those with a specific location
+	  - Weapon/elemental bounties type with a location will "contain" those with the same weapon/elemental type without a location
+	  - For those that aren't weapon/elemental type focused, keep them as separate bounties
+	  - Append any extras to the first location set
+  - Start with location (crucible/gambit/vex offensive would have no location, they are grouped separately)
+  - Sort by largest location set to smallest. then crucible/gambit/vex offensive
 
 Interface:
   - Lists steps first on location, then steps to take
   - Displays stats like total xp, infamy/valor/etc., legendary gear after completing all bounties
   - Can select weekly/daily/all bounties/quests
   - Can filter by location/requirements/activity
+
+Object types:
+  - IBounty
+  - Bounty
+  - Bounty group: group of bounties with same weapon/elemental type - bounty with location acts as the main bounty
+  - Location set: group of bounties for a given location
+  
