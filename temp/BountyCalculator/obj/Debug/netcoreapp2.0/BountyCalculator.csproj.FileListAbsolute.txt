@@ -1,0 +1,11 @@
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\bin\Debug\netcoreapp2.0\BountyCalculator.deps.json
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\bin\Debug\netcoreapp2.0\BountyCalculator.runtimeconfig.json
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\bin\Debug\netcoreapp2.0\BountyCalculator.runtimeconfig.dev.json
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\bin\Debug\netcoreapp2.0\BountyCalculator.dll
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\bin\Debug\netcoreapp2.0\BountyCalculator.pdb
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.csproj.CoreCompileInputs.cache
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.AssemblyInfoInputs.cache
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.AssemblyInfo.cs
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.dll
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.pdb
+D:\Development\destiny2_bounty_calculator\BountyCalculator\BountyCalculator\obj\Debug\netcoreapp2.0\BountyCalculator.csprojAssemblyReference.cache
