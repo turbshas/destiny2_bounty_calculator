@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BountyCalculator.ApiInteraction
 {
-    public class AuthorizationManager : IAuthorizationManager
+    class AuthorizationManager : IAuthorizationManager, IClientManager
     {
         static AuthorizationManager()
         {
@@ -18,11 +18,15 @@ namespace BountyCalculator.ApiInteraction
         private const int REQUEST_TIMEOUT_MILLISECONDS = 10 * 1000;
 
         private readonly ConcurrentDictionary<string, ExpirationWrapper<RequestGuid>> _authRequests;
+        private readonly ConcurrentDictionary<string, ApiClient> _apiClients;
 
         private AuthorizationManager()
         {
             _authRequests = new ConcurrentDictionary<string, ExpirationWrapper<RequestGuid>>();
+            _apiClients = new ConcurrentDictionary<string, ApiClient>();
         }
+
+        #region [ Request guid handling ]
 
         private void RequestExpiredHandler(object sender, EventArgs e)
         {
@@ -42,12 +46,12 @@ namespace BountyCalculator.ApiInteraction
 
         public RequestGuid GetRequestGuid(string guidString)
         {
-            if (_authRequests.TryGetValue(guidString, out ExpirationWrapper<RequestGuid> wrapper))
+            if (!_authRequests.TryGetValue(guidString, out ExpirationWrapper<RequestGuid> wrapper))
             {
-                return wrapper.Value;
+                throw new KeyNotFoundException("Could not retrieve request guid. Guid either does not exist or has expired.");
             }
 
-            return null;
+            return wrapper.Value;
         }
 
         public void AddRequestGuid(RequestGuid requestGuid)
@@ -57,7 +61,6 @@ namespace BountyCalculator.ApiInteraction
             wrapper.RestartTimer();
             if (!_authRequests.TryAdd(requestGuid.ToString(), wrapper))
             {
-                //TODO: create custom exception for this
                 throw new InvalidOperationException("Request already exists.");
             }
         }
@@ -72,5 +75,56 @@ namespace BountyCalculator.ApiInteraction
             wrapper.StopTimer();
             return wrapper.Value;
         }
+
+        #endregion
+
+        #region [ Client storage ]
+
+        private void TokenExpiredHandler(object sender, EventArgs e)
+        {
+            if (! (sender is ApiClient))
+            {
+                /* Shouldn't happen */
+                return;
+            }
+
+            ApiClient client = (ApiClient)sender;
+            if (!_apiClients.TryRemove(client.Guid, out client))
+            {
+                /* Client was already removed, ignore */
+                return;
+            }
+        }
+
+        public ApiClient GetApi(string clientGuid)
+        {
+            if (!_apiClients.TryGetValue(clientGuid, out ApiClient client))
+            {
+                throw new KeyNotFoundException("Could not retrieve API client. Client either does not exist or has expired.");
+            }
+
+            return client;
+        }
+
+        public void AddApiClient(ApiClient client)
+        {
+            client.TokenExpired += TokenExpiredHandler;
+            if (!_apiClients.TryAdd(client.Guid, client))
+            {
+                throw new InvalidOperationException("Client already exists.");
+            }
+        }
+
+        public ApiClient RemoveApiClient(string clientGuid)
+        {
+            if (!_apiClients.TryRemove(clientGuid, out ApiClient client))
+            {
+                throw new KeyNotFoundException("Client does not exist.");
+            }
+
+            return client;
+        }
+
+        #endregion
     }
 }

@@ -14,17 +14,14 @@ namespace BountyCalculator.Controllers
     public class ValuesController : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.RedirectKeepVerb)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public async Task<ActionResult<bool>> Get()
+        public async Task<ActionResult> Get()
         {
-            ApiClient client = new ApiClient(AuthorizationManager.Instance);
-            string authorizationUrl = await client.GetAuthorizationUrl();
+            ApiClient client = new ApiClient(AuthorizationManager.Instance, AuthorizationManager.Instance);
+            string authorizationUrl = await client.GetAuthorizationUrlAsync();
 
-            /* Redirect the client to the login/authorization portal */
-            Response.Headers.Add("Location", authorizationUrl);
-            Response.StatusCode = (int)HttpStatusCode.RedirectKeepVerb;
-            return true;
+            return RedirectPreserveMethod(authorizationUrl);
         }
 
         [HttpGet]
@@ -46,17 +43,11 @@ namespace BountyCalculator.Controllers
                 return BadRequest("Query string parameter 'code' is required.");
             }
 
-            ApiClient client = new ApiClient(AuthorizationManager.Instance);
-            bool result = await client.GetToken(requestGuidString, authCode);
+            ApiClient client = new ApiClient(AuthorizationManager.Instance, AuthorizationManager.Instance);
+            string clientGuid = await client.GetTokenAsync(requestGuidString, authCode);
+            return await client.Test();
 
-            if (result)
-            {
-                return "You've just authorized this app";
-            }
-            else
-            {
-                return this.BadRequest();
-            }
+            return $"You've just authorized this app! Client guid: {clientGuid}";
         }
     }
 }

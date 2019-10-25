@@ -28,7 +28,7 @@ namespace BountyCalculator.ApiInteraction
             {
                 if (_enabled)
                 {
-                    Expired?.Invoke(this, null);
+                    Expired?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
